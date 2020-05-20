@@ -20,7 +20,7 @@ export interface graphql {
    *
    * @param {object} endpoint Must set `method` and `url`. Plus URL, query or body parameters, as well as `headers`, `mediaType.{format|previews}`, `request`, or `baseUrl`.
    */
-  (options: RequestParameters): GraphQlResponse;
+  <T>(options: RequestParameters): GraphQlResponse<T>;
 
   /**
    * Sends a GraphQL query request based on endpoint options
@@ -28,7 +28,7 @@ export interface graphql {
    * @param {string} query GraphQL query. Example: `'query { viewer { login } }'`.
    * @param {object} [parameters] URL, query or body parameters, as well as `headers`, `mediaType.{format|previews}`, `request`, or `baseUrl`.
    */
-  (query: Query, parameters?: RequestParameters): GraphQlResponse;
+  <T>(query: Query, parameters?: RequestParameters): GraphQlResponse<T>;
 
   /**
    * Returns a new `endpoint` with updated route and parameters
@@ -43,14 +43,14 @@ export interface graphql {
 
 // export type withCustomRequest = (request: typeof Request) => graphql;
 
-export type GraphQlResponse = ReturnType<typeof graphql>;
+export type GraphQlResponse<T> = Promise<T>
 
 export type GraphQlQueryResponseData = {
   [key: string]: any;
 };
 
-export type GraphQlQueryResponse = {
-  data: GraphQlQueryResponseData;
+export type GraphQlQueryResponse<ResponseData> = {
+  data: ResponseData;
   errors?: [
     {
       message: string;

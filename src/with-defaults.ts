@@ -7,15 +7,15 @@ export function withDefaults(
   newDefaults: RequestParameters
 ): ApiInterface {
   const newRequest = request.defaults(newDefaults);
-  const newApi = (
+  const newApi = <T>(
     query: Query | RequestParameters,
     options?: RequestParameters
   ) => {
-    return graphql(newRequest, query, options);
+    return graphql<T>(newRequest, query, options);
   };
 
   return Object.assign(newApi, {
-    defaults: withDefaults.bind(null, newRequest),
+    defaults: (newDefaults: RequestParameters) => withDefaults(newRequest, newDefaults),
     endpoint: Request.endpoint,
   });
 }
